@@ -2,7 +2,6 @@ package com.example.adi.frappybird;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -12,7 +11,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by adi on 05/03/17.
@@ -20,10 +20,18 @@ import java.util.Arrays;
 
 public class NetworkOperation extends AsyncTask<String, Boolean, ArrayList<String>> {
     private Activity rootAct;
+    public Map<String,String> universityDetailsMap = new HashMap<String,String>();
     ArrayList<String> universityList = new ArrayList<String>();
 
-    public NetworkOperation(Activity activity){
+    public interface AsyncResponse {
+        void processFinish(String output);
+    }
+
+    public AsyncResponse delegate = null;
+
+    public NetworkOperation(Activity activity, AsyncResponse delegate){
         this.rootAct = activity;
+        this.delegate = delegate;
     }
 
     @Override
@@ -38,15 +46,16 @@ public class NetworkOperation extends AsyncTask<String, Boolean, ArrayList<Strin
             universityList.addAll(getUniversityStringsFromWebDocument(doc));
         }
 
-
         return universityList;
     }
 
-    private ArrayList getUniversityStringsFromWebDocument(Document doc) {
+    private ArrayList getUniversityStringsFromWebDocument(Document document) {
         ArrayList universityList = new ArrayList<String>();
-        for(Element university : doc.select("div.col-sm-9")) {
+        for(Element university : document.select("div.col-sm-9")) {
             String universityName = university.getElementsByTag("a").first().text();
+            String collegeDetailLink = university.select("a").first().attr("href");
             universityList.add(universityName);
+            universityDetailsMap.put(universityName, collegeDetailLink);
         }
             return universityList;
     }
@@ -57,6 +66,10 @@ public class NetworkOperation extends AsyncTask<String, Boolean, ArrayList<Strin
         AutoCompleteTextView textView = (AutoCompleteTextView) rootAct.findViewById(R.id.editText);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootAct, android.R.layout.simple_dropdown_item_1line, arrayList);
         textView.setAdapter(adapter);
+        delegate.processFinish(null);
     }
 
+    public String getUniversityDetailHTML(String universityName){
+        return null;
+    }
 }

@@ -1,10 +1,14 @@
 package com.example.adi.frappybird;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchUniversity(View view) {
-        //On clicking search button
+        Intent intent = new Intent(this, CollegeDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -30,7 +35,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void getUniversityList() {
         final ArrayList<String> universityList = new ArrayList();
-        AsyncTask task = new NetworkOperation(this).execute(URL);
+        AsyncTask task = new NetworkOperation(this, new NetworkOperation.AsyncResponse(){
+
+            @Override
+            public void processFinish(String output){
+                //Here you will receive the result fired from async class
+                //of onPostExecute(result) method.
+            }
+        }).execute(URL);
+        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.editText);
+        task.;
+
     }
 }
 
