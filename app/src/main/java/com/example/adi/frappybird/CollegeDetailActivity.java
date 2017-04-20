@@ -10,7 +10,9 @@ public class CollegeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_college_detail);
+        Bundle bundle = getIntent().getExtras();
+        String URL = bundle.getString("Chosen University Link");
         WebView myWebView = (WebView) findViewById(R.id.webview);
-        myWebView.loadUrl("http://www.example.com");
+        myWebView.loadUrl("https://yocket.in" + URL);
     }
 }

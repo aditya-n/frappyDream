@@ -20,11 +20,11 @@ import java.util.Map;
 
 public class NetworkOperation extends AsyncTask<String, Boolean, ArrayList<String>> {
     private Activity rootAct;
-    public Map<String,String> universityDetailsMap = new HashMap<String,String>();
+    public HashMap<String,String> universityDetailsMap = new HashMap<String,String>();
     ArrayList<String> universityList = new ArrayList<String>();
 
     public interface AsyncResponse {
-        void processFinish(String output);
+        void processFinish(HashMap<String, String> universityDetailMap);
     }
 
     public AsyncResponse delegate = null;
@@ -66,10 +66,7 @@ public class NetworkOperation extends AsyncTask<String, Boolean, ArrayList<Strin
         AutoCompleteTextView textView = (AutoCompleteTextView) rootAct.findViewById(R.id.editText);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootAct, android.R.layout.simple_dropdown_item_1line, arrayList);
         textView.setAdapter(adapter);
-        delegate.processFinish(null);
+        delegate.processFinish(universityDetailsMap);
     }
 
-    public String getUniversityDetailHTML(String universityName){
-        return null;
-    }
 }
